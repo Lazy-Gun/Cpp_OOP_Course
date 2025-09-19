@@ -1,0 +1,127 @@
+C++ OOP course notes
+
+compile:
+g++ -S main.cpp --> produces assembler
+g++ -c main.cpp --> produces object code
+g++ main.cpp --> compile assemble and link.
+
+g++ main.cpp -o <filename>  --> compile to executable file name
+g++ --std=c++11 main.cpp  --> compile to executable file name
+g++ -Wall -std=c++11 main.cpp --> Warning flag 
+
+
+/** Comment with double star will appear in the editor info */
+
+Functions must declared before use.
+But,  promise of function is before its called the function can be implemented after the call 
+- The function prototype. Then fuction can be implimented in seperate file compile second file with main file
+
+g++ main.cpp -o <filename> <filename2>
+
+Usefull Bash commands
+
+# lines starting with # are comments! 
+
+# list contents of current directory
+ls -l
+
+# move into a directory called mydirectory
+cd mydirectory 
+
+# print out the present working directory
+pwd 
+
+# build all the cpp files in the current director and output an executable binary called  myprogram
+g++ *.cpp -o myprogram 
+
+# run a program called myprogram in the current directory
+./myprogram 
+
+Declaring data
+
+int x = 3; is the same as int x{3};
+
+When inialising a float we need to ensure that it's not coverted to a double by added a f at tye end of the assignment:
+float f = 1.97674f;
+
+also a double can be assigned as a float 
+double d = 1.87136487f
+
+std::string text{"string"}; is the same as std::string text="string";
+
+declare enum
+
+enum class thingytype{x,y};
+assign variable 
+thingytype thing= thingytype::x;
+
+std::cout << shows a minimum number of digits so outputs a rounded version of the doublesso,
+we need to add:
+#include <iomanip>
+Then call: 
+std::cout << std::fixed << std::setprecision(8);
+
+enums values cannot be typed as strings so in order to cout << them we need a helper function to 
+convert them to strings:
+
+enum class OrderBookType { bid, ask };
+
+std::string orderBookTypeToString(OrderBookType type) {
+    switch (type) {
+        case OrderBookType::bid: return "bid";
+        case OrderBookType::ask: return "ask";
+        default: return "unknown";
+    }
+}
+
+
+Define a class
+class Name{ 
+    public:
+    // construtor
+        Name(double _number,
+             std::string _string,
+             EnumType _enumType) 
+    // Initialisation list
+    : number(number), 
+      string(_string), 
+      enumType{_enumType}
+
+    {
+
+    }
+    double number,
+    std::string string,
+    EnumType enumType
+};
+
+vector of objects:
+
+std::vector<ClassName> vectorName;
+vectorName.pushback(vectorName{ 1, "thing", enum});
+
+iterate a vector of objects 3 methods:
+
+Method 1:
+for (className vectorNames : VectorName){ //vectorNames or new variable
+    do something with entry
+} //works on copy of data
+
+// iterate by reference
+for (className& vectorNames : VectorName){ //vectorNames or new variable
+    do something with entry
+} //works on data note&
+
+Method 2:
+//iterate as if a normal array - no copying ++i more efficient increments in place
+for (unsigned int i = 0; i < vectorName.size(); ++i){ 
+
+    dosomething vectorName[i]; 
+}
+
+Method3:
+// Instead of using the square bracket array style accessing [i], we're using object style .at(i)
+for (unsigned int i = 0; i < vectorName.size(); ++i){ //iterate as if a normal array - no copying ++i more efficient increments in place
+
+    dosomething vectorName.at(i); 
+}
