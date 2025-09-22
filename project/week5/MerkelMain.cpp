@@ -1,0 +1,120 @@
+#include<iostream>
+#include<vector>
+#include"MerkelMain.h"
+#include"OrderBookEntry.h"
+
+MerkelMain::MerkelMain(){
+
+}
+
+void MerkelMain::init(){
+    loadOrderBook();
+    int input;
+    while(true){
+            printMenu();
+            input = getUserOption();
+            processUserOption(input);
+    }
+}
+
+void MerkelMain::loadOrderBook(){
+
+
+    entries.push_back( OrderBookEntry { "01:24.9","ETH/BTC",OrderBookType::bid,0.02187308,7.44564869} );
+    entries.push_back( OrderBookEntry { "01:24.9","ETH/BTC",OrderBookType::bid,0.02187307,3.467434} );
+    entries.push_back( OrderBookEntry { "01:24.9","ETH/BTC",OrderBookType::bid,0.02187305,6.85567013} );
+    entries.push_back( OrderBookEntry { "01:24.9","ETH/BTC",OrderBookType::bid,0.021873,1} );
+    entries.push_back( OrderBookEntry { "01:24.9","ETH/BTC",OrderBookType::bid,0.02187163,0.03322569} );
+}
+
+// Week 2 refactored menu and user input Functions
+void MerkelMain::printMenu() {
+    // main menu printout to console
+    std::cout << " 1 : Print help" << std::endl;
+    std::cout << " 2 : Print exchange stats" << std::endl;
+    std::cout << " 3 : Place an ask" << std::endl;
+    std::cout << " 4 : Place a bid" << std::endl;
+    std::cout << " 5 : Print wallet" << std::endl;
+    std::cout << " 6 : Continue" << std::endl;
+    std::cout << " 7 : Exit " << std::endl;
+    std::cout << " ************************ " << std::endl;
+    std::cout << " Type a number 1-6" << std::endl;
+}
+
+int MerkelMain::getUserOption()
+{
+    // get input value and return it
+    int userOption;
+    std::cin >> userOption;
+    std::cout << " You chose: " << userOption << std::endl;
+    return userOption;
+}
+
+void MerkelMain::printHelp(){
+    std::cout << " 1: Matt Olsen's rip off crypto currency exchange" << std::endl;
+    std::cout << " 1: But, Sell, Give me your Cash" << std::endl;
+    std::cout << " " << std::endl;
+
+}
+
+void MerkelMain::printMarketStats(){
+    std::cout << " 2: OrderBook contains : " << entries.size() << " entries" << std::endl;
+    std::cout << " " << std::endl;
+}
+
+void MerkelMain::enterAsk(){
+    std::cout << " 3: Ask for exchange" << std::endl;
+    std::cout << " " << std::endl;
+}
+
+void MerkelMain::enterBid(){
+    std::cout << " 4: Bid for an exchange" << std::endl;
+    std::cout << " " << std::endl;
+}
+
+void MerkelMain::printWallet(){
+    std::cout << " 5: Wallet print out" << std::endl;
+    std::cout << " " << std::endl;
+}
+
+void MerkelMain::gotoNextTimeframe(){
+    std::cout << " 6: Continue to next time frame " << std::endl;
+    std::cout << " " << std::endl;
+}
+
+void MerkelMain::exit_program(){
+    std::cout << " 7: Exit the exchange" << std::endl;
+    std::cout << " " << std::endl;
+    exit(0);
+}
+/** Function to process user input. Uses switch statement not if staements and I have added an exit() function  */
+void MerkelMain::processUserOption(int userOption)
+{
+    switch (userOption){
+
+    case 1:
+        printHelp();
+        break;
+    case 2:
+        printMarketStats();
+
+        break;
+    case 3:
+        enterAsk();
+        break;
+    case 4:
+        enterBid();
+        break;
+    case 5:
+        void printWallet();
+        break;
+    case 6:
+        gotoNextTimeframe();
+        break;
+    case 7:
+        exit_program();
+    default:
+        std::cout << " Invalid number" << std::endl;
+        break;
+    }
+}

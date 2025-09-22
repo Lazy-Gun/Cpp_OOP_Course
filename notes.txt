@@ -125,3 +125,6 @@ for (unsigned int i = 0; i < vectorName.size(); ++i){ //iterate as if a normal a
 
     dosomething vectorName.at(i); 
 }
+
+Add preproceesor instruction to header file to stop them beig compiled more than once
+pragma once  
