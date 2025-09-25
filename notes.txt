@@ -28,6 +28,9 @@ ls -l
 # move into a directory called mydirectory
 cd mydirectory 
 
+# open new file in the directory
+touch filename.xxx
+
 # print out the present working directory
 pwd 
 
