@@ -11,6 +11,7 @@
 #include <iomanip>
 #include "OrderBookEntry.h"
 #include "MerkelMain.h"
+#include "CSVReader.h"
 
 /**
 * Dataset : taken from the first 5 line of course datasetCSV
@@ -27,7 +28,8 @@ std::string orderBookTypeToString(OrderBookType type);
 
 int main()
 {
-    MerkelMain app;
-    app.init();
+    //MerkelMain app;
+    //app.init();
+    CSVReader reader;
 
 }
