@@ -5,7 +5,7 @@
 #pragma once
 #include<string>
 
-enum class OrderBookType{bid, ask};
+enum class OrderBookType{bid, ask, unknown};
 
 class OrderBookEntry { 
     public:
@@ -17,7 +17,7 @@ class OrderBookEntry {
                         double _amount
                         );
 
-    
+                        static OrderBookType stringToOrderBookType(std::string s);
 
     // Initialisation list
 
