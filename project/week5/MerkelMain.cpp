@@ -2,6 +2,7 @@
 #include<vector>
 #include"MerkelMain.h"
 #include"OrderBookEntry.h"
+#include "CSVReader.h"
 
 MerkelMain::MerkelMain(){
 
@@ -19,12 +20,7 @@ void MerkelMain::init(){
 
 void MerkelMain::loadOrderBook(){
 
-
-    entries.push_back( OrderBookEntry { "01:24.9","ETH/BTC",OrderBookType::bid,0.02187308,7.44564869} );
-    entries.push_back( OrderBookEntry { "01:24.9","ETH/BTC",OrderBookType::bid,0.02187307,3.467434} );
-    entries.push_back( OrderBookEntry { "01:24.9","ETH/BTC",OrderBookType::bid,0.02187305,6.85567013} );
-    entries.push_back( OrderBookEntry { "01:24.9","ETH/BTC",OrderBookType::bid,0.021873,1} );
-    entries.push_back( OrderBookEntry { "01:24.9","ETH/BTC",OrderBookType::bid,0.02187163,0.03322569} );
+    entries = CSVReader::readCSV("crypto_dataset.csv");
 }
 
 // Week 2 refactored menu and user input Functions
@@ -59,6 +55,18 @@ void MerkelMain::printHelp(){
 
 void MerkelMain::printMarketStats(){
     std::cout << " 2: OrderBook contains : " << entries.size() << " entries" << std::endl;
+    unsigned int bids = 0;
+    unsigned int asks = 0;
+    for(OrderBookEntry& e : entries){
+        if (e.orderType == OrderBookType::ask ){
+            asks ++;
+        }
+        if (e.orderType == OrderBookType::bid ){
+            bids ++;
+        }
+
+    }
+    std::cout << " 2: OrderBook contains : " << asks << " asks, and " << bids << " bids" << std::endl;
     std::cout << " " << std::endl;
 }
 

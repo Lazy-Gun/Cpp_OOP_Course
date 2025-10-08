@@ -28,8 +28,8 @@ std::string orderBookTypeToString(OrderBookType type);
 
 int main()
 {
-    //MerkelMain app;
-    //app.init();
-    CSVReader reader;
+    MerkelMain app;
+    app.init();
+    //CSVReader::readCSV("crypto_dataset.csv");
 
 }
