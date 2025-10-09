@@ -1,0 +1,29 @@
+#pragma once
+#include "OrderBookEntry.h"
+#include "CSVReader.h"
+#include <string>
+#include <vector>
+#include <map>
+
+
+class OrderBook{
+
+
+    public:
+    /**Construtor, read in a CSV data file */
+        OrderBook(std::string filename);
+    /** Return vector of all known products in the dataset  */
+        std::vector<std::string> getKnownProducts();
+    /* Return vector of orders according to the sent filtres*/
+        std::vector<OrderBookEntry> getOrders(OrderBookType type,
+                                              std::string product,
+                                              std::string timestamp);
+
+        static double getHighPrice(std::vector<OrderBookEntry>& orders);
+
+        static double getLowPrice(std::vector<OrderBookEntry>& orders);
+
+    private:
+
+        std::vector<OrderBookEntry> orders;
+};

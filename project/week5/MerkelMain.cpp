@@ -9,7 +9,7 @@ MerkelMain::MerkelMain(){
 }
 
 void MerkelMain::init(){
-    loadOrderBook();
+
     int input;
     while(true){
             printMenu();
@@ -18,10 +18,7 @@ void MerkelMain::init(){
     }
 }
 
-void MerkelMain::loadOrderBook(){
 
-    entries = CSVReader::readCSV("crypto_dataset.csv");
-}
 
 // Week 2 refactored menu and user input Functions
 void MerkelMain::printMenu() {
@@ -54,10 +51,24 @@ void MerkelMain::printHelp(){
 }
 
 void MerkelMain::printMarketStats(){
-    std::cout << " 2: OrderBook contains : " << entries.size() << " entries" << std::endl;
+
+
+    for(std::string const& p : orderBook.getKnownProducts())
+    {
+        std::cout << "Product: " << p << std::endl;
+        std::vector<OrderBookEntry> entries = orderBook.getOrders(OrderBookType::ask,
+                                                                p, "01:24.9");
+        std::cout << "Asks seen: " << entries.size() << std::endl;
+        std::cout<< "Max ask: " << OrderBook::getHighPrice(entries) << std::endl;
+        std::cout<< "Min ask: " << OrderBook::getLowPrice(entries) << std::endl;
+
+    }
+
+    /*
+    std::cout << " 2: OrderBook contains : " << orders.size() << " orders" << std::endl;
     unsigned int bids = 0;
     unsigned int asks = 0;
-    for(OrderBookEntry& e : entries){
+    for(OrderBookEntry& e : orders){
         if (e.orderType == OrderBookType::ask ){
             asks ++;
         }
@@ -67,7 +78,7 @@ void MerkelMain::printMarketStats(){
 
     }
     std::cout << " 2: OrderBook contains : " << asks << " asks, and " << bids << " bids" << std::endl;
-    std::cout << " " << std::endl;
+    std::cout << " " << std::endl;*/
 }
 
 void MerkelMain::enterAsk(){

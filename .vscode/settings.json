@@ -47,6 +47,8 @@
     "vector": "cpp",
     "xlocmon": "cpp",
     "xloctime": "cpp",
-    "fstream": "cpp"
+    "fstream": "cpp",
+    "map": "cpp",
+    "xtree": "cpp"
   }
 }

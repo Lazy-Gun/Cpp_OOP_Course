@@ -2,6 +2,8 @@
 
 #include<vector>
 #include"OrderBookEntry.h"
+#include"OrderBook.h"
+
 
 class MerkelMain{
 
@@ -11,7 +13,6 @@ class MerkelMain{
         void init();
 
     private:
-        void loadOrderBook();
         void printMenu();
         int getUserOption();
         void printHelp();
@@ -23,7 +24,6 @@ class MerkelMain{
         void processUserOption(int userOption);
         void exit_program();
 
-        std::vector<OrderBookEntry> entries;
-
+        OrderBook orderBook{"data/crypto_dataset.csv"};
 
 };

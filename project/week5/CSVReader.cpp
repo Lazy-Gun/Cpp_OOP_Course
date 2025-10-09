@@ -9,7 +9,7 @@ CSVReader::CSVReader(){
 
 std::vector<OrderBookEntry> CSVReader::readCSV(std::string csvFilename){
 
-    std::vector<OrderBookEntry> entries;
+    std::vector<OrderBookEntry> orders;
     std::ifstream csvFile{csvFilename};
     std::string line;
     if(csvFile.is_open()){
@@ -17,14 +17,14 @@ std::vector<OrderBookEntry> CSVReader::readCSV(std::string csvFilename){
         while(std::getline(csvFile, line)){
             try{
                 OrderBookEntry obe = stringsToOBE(tokenise(line, ','));
-                entries.push_back(obe);
+                orders.push_back(obe);
             } catch(const std::exception& e){ 
                std::cout << "CSVReader::readCSV read: Bad data"<< std::endl; 
             }
         }
     }
-    std::cout << "CSVReader::readCSV read " << entries.size() << "entries" << std::endl;
-    return entries;
+    std::cout << "CSVReader::readCSV read " << orders.size() << "orders" << std::endl;
+    return orders;
 }
 
 std::vector<std::string> CSVReader::tokenise(std::string csvLine, char separator){

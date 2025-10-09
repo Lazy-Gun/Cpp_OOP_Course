@@ -131,3 +131,15 @@ for (unsigned int i = 0; i < vectorName.size(); ++i){ //iterate as if a normal a
 
 Add preproceesor instruction to header file to stop them beig compiled more than once
 pragma once  
+
+#include<fstream>
+to handle files
+close files when finished reading them
+
+exceptions 
+try{
+    some logic
+}catch(std::exception& e){
+    print error or something with exception
+    contiue if in loop
+}
