@@ -11,6 +11,7 @@ MerkelMain::MerkelMain(){
 void MerkelMain::init(){
 
     int input;
+    currentTime = orderBook.getEarliestTime();
     while(true){
             printMenu();
             input = getUserOption();
@@ -23,6 +24,8 @@ void MerkelMain::init(){
 // Week 2 refactored menu and user input Functions
 void MerkelMain::printMenu() {
     // main menu printout to console
+    
+    std::cout << " ************************ " << std::endl;
     std::cout << " 1 : Print help" << std::endl;
     std::cout << " 2 : Print exchange stats" << std::endl;
     std::cout << " 3 : Place an ask" << std::endl;
@@ -31,6 +34,7 @@ void MerkelMain::printMenu() {
     std::cout << " 6 : Continue" << std::endl;
     std::cout << " 7 : Exit " << std::endl;
     std::cout << " ************************ " << std::endl;
+    std::cout << " Current time is  " << currentTime << std::endl;
     std::cout << " Type a number 1-6" << std::endl;
 }
 
@@ -51,16 +55,21 @@ void MerkelMain::printHelp(){
 }
 
 void MerkelMain::printMarketStats(){
-
+    std::cout << "Current time is  " << currentTime << std::endl;
 
     for(std::string const& p : orderBook.getKnownProducts())
     {
         std::cout << "Product: " << p << std::endl;
         std::vector<OrderBookEntry> entries = orderBook.getOrders(OrderBookType::ask,
-                                                                p, "01:24.9");
+                                                                p, currentTime);
+
+        
         std::cout << "Asks seen: " << entries.size() << std::endl;
-        std::cout<< "Max ask: " << OrderBook::getHighPrice(entries) << std::endl;
-        std::cout<< "Min ask: " << OrderBook::getLowPrice(entries) << std::endl;
+        double max_ask = OrderBook::getHighPrice(entries);
+        double min_ask = OrderBook::getLowPrice(entries);
+        std::cout<< "Max ask: " << max_ask << std::endl;
+        std::cout<< "Min ask: " << min_ask << std::endl;
+        std::cout<< "" <<  std::endl;
 
     }
 
@@ -99,6 +108,8 @@ void MerkelMain::printWallet(){
 void MerkelMain::gotoNextTimeframe(){
     std::cout << " 6: Continue to next time frame " << std::endl;
     std::cout << " " << std::endl;
+    currentTime = orderBook.getNextTime(currentTime);
+
 }
 
 void MerkelMain::exit_program(){
@@ -137,3 +148,4 @@ void MerkelMain::processUserOption(int userOption)
         break;
     }
 }
+

@@ -143,3 +143,14 @@ try{
     print error or something with exception
     contiue if in loop
 }
+
+To access read only objects not to change - no write functions and to reference original object no copies of vector created.
+
+for (const std::string& s : string)
+{
+    code that doesn't write to string....
+}
+
+For compiler to look in a name space alredy in use for example std::
+
+using namespace std;

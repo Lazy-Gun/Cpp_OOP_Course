@@ -24,6 +24,8 @@ class MerkelMain{
         void processUserOption(int userOption);
         void exit_program();
 
+        std::string currentTime;
+
         OrderBook orderBook{"data/crypto_dataset.csv"};
 
 };
