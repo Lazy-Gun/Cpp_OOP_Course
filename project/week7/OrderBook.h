@@ -31,7 +31,7 @@ class OrderBook{
 
         static double computeMean(std::vector<OrderBookEntry>& orders);
         
-        static double percentageChange(std::vector<OrderBookEntry>& orders);
+        static double percentageChange(std::vector<OrderBookEntry>& orders, std::vector<OrderBookEntry>& previous_orders);
 
     private:
 

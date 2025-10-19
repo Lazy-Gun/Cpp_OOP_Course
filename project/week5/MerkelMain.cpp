@@ -67,8 +67,12 @@ void MerkelMain::printMarketStats(){
         std::cout << "Asks seen: " << entries.size() << std::endl;
         double max_ask = OrderBook::getHighPrice(entries);
         double min_ask = OrderBook::getLowPrice(entries);
+        double mean = OrderBook::computeMean(entries);
         std::cout<< "Max ask: " << max_ask << std::endl;
         std::cout<< "Min ask: " << min_ask << std::endl;
+        std::cout<< "Spread: " << max_ask - min_ask << std::endl;
+        std::cout<< "Mean ask: " << mean << std::endl;
+
         std::cout<< "" <<  std::endl;
 
     }

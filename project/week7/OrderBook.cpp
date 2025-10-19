@@ -103,40 +103,46 @@
             return next_timestamp;
         }
 
+        /**Compute the arithmatic mean of the product prices
+         * input: vector of filtered order book entry
+         * returns: average of product price filtered by time stamp
+         */
 
         double OrderBook::computeMean(std::vector<OrderBookEntry>& orders)
         {
+            // Local varibles used for computation
             double sum {0};
             double mean{0};
+
+            // Collect the product price values for sum pf product prices
             for(OrderBookEntry& e :orders)
             {
+               //
                sum += e.price;
             }
-
+            // divide by numer of elements to compute the average
             mean = sum / orders.size();
             return mean;
 
         }
 
-        /*Compute the percentage change in price from timestamp to timestamp. 
-        double OrderBook::percentageChange(std::vector<OrderBookEntry>& orders)
+        /*Compute the percentage change in price from timestamp to timestamp
+         * inputs: vectors of time stampe OrderBook entries filtered by time stamp
+         * returns: percentage change of average product price
+        */
+
+        double OrderBook::percentageChange(std::vector<OrderBookEntry>& orders, std::vector<OrderBookEntry>& previous_orders)
         {
-            // In market stats function using 
-            // order book entries and compute change in max and min price.
-            //            
-            // price in this timeStamp
-            // price in previous time stamp 
-            // do some maths
-            // return percentage change of mean price. 
-            double previous_mean{0};
-            double current_mean{0};
-            double percentage{0};// compute mean
+            // variable to store returned value
+            double percentage;
+            // calculate the averages of the product price for current time stamp
+            double previous_mean = OrderBook::computeMean(previous_orders);
+             // calculate the averages of the product price for current previous time stamp
+            double mean = OrderBook::computeMean(orders);
+            
+            // compute the percentage change in product price using the mean of the price
+            percentage =  (( mean - previous_mean)/mean)*100;
 
-            for(OrderBookEntry& e :orders){
-
-                
-
-            }
             return percentage;
 
-        } */
+        }
