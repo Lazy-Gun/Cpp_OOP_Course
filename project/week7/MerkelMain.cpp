@@ -1,6 +1,7 @@
 #include<iostream>
 #include<vector>
 #include<iomanip>
+#include<limits>
 #include"MerkelMain.h"
 #include"OrderBookEntry.h"
 #include "CSVReader.h"
@@ -37,14 +38,20 @@ void MerkelMain::printMenu() {
     std::cout << " 7 : Exit " << std::endl;
     std::cout << " ************************ " << std::endl;
     std::cout << " Current time is  " << currentTime << std::endl;
-    std::cout << " Type a number 1-6" << std::endl;
+    //std::cout << " Type a number 1-6" << std::endl;
 }
 
 int MerkelMain::getUserOption()
 {
     // get input value and return it
-    int userOption;
-    std::cin >> userOption;
+    int userOption{0};
+    std::string line;
+    std::cout << " Type a number 1-6" << std::endl;
+    std::getline(std::cin, line);
+    try {userOption = std::stoi(line);
+    }catch(const std::exception& e){
+        // caught
+    }
     std::cout << " You chose: " << userOption << std::endl;
     return userOption;
 }
@@ -69,7 +76,11 @@ void MerkelMain::printMarketStats(){
         std::vector<OrderBookEntry> previousEntries = orderBook.getOrders(OrderBookType::ask,
                                                                 p, previousTime);                                                               
 
+        std::vector<OrderBookEntry> entriesBid = orderBook.getOrders(OrderBookType::bid,
+                                                                p, previousTime);      
 
+        std::vector<OrderBookEntry> previousEntriesBid = orderBook.getOrders(OrderBookType::bid,
+                                                                p, previousTime);      
         
         std::cout << "Asks seen: " << entries.size() << std::endl;
         double max_ask = OrderBook::getHighPrice(entries);
@@ -83,6 +94,22 @@ void MerkelMain::printMarketStats(){
         std::cout<< "Mean ask: " << mean << std::endl;
         std::cout<< "Previous Mean ask: " << previous_mean << std::endl;
         std::cout<< std::showpos << "Percentage change:  " << percentage_change << " %" << std::noshowpos << std::endl;
+
+        std::cout<< "" <<  std::endl;
+
+        std::cout << "Bids seen: " << entriesBid.size() << std::endl;
+        double max_bid = OrderBook::getHighPrice(entriesBid);
+        double min_bid = OrderBook::getLowPrice(entriesBid);
+        double mean_bid = OrderBook::computeMean(entriesBid);
+        double previous_mean_bid = OrderBook::computeMean(previousEntriesBid);
+        double percentage_change_bid = OrderBook::percentageChange(entriesBid, previousEntriesBid);
+        std::cout<< "Max bid: " << max_bid << std::endl;
+        std::cout<< "Min bid: " << min_bid << std::endl;
+        std::cout<< "Spread: " << max_bid - min_bid << std::endl;
+
+        std::cout<< "Mean bid: " << mean_bid << std::endl;
+        std::cout<< "Previous Mean bid: " << previous_mean_bid << std::endl;
+        std::cout<< std::showpos << "Percentage change:  " << percentage_change_bid << " %" << std::noshowpos << std::endl;
 
 
         std::cout<< "" <<  std::endl;
@@ -107,13 +134,65 @@ void MerkelMain::printMarketStats(){
 }
 
 void MerkelMain::enterAsk(){
-    std::cout << " 3: Ask for exchange" << std::endl;
-    std::cout << " " << std::endl;
+    std::cout << " 3: Ask for exchange - Enter: product, price, amount, eg ETH/BTC, 200, 0.5" << std::endl;
+    std::string input;
+    // Function to clean up input string
+    // std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+    std::getline(std::cin, input);
+
+    std::vector<std::string> tokens = CSVReader::tokenise(input, ',');
+    if (tokens.size() != 3) 
+    {
+    std::cout << "Bad Input! "<< input << std::endl;
+    }
+    else{
+        try{
+        OrderBookEntry obe = CSVReader::stringsToOBE(
+            currentTime,
+            tokens[0],
+            OrderBookType::ask,
+            tokens[1],
+            tokens[2]
+        );
+        orderBook.insertOrder(obe);
+        }catch(const std::exception& e)
+        {
+            std::cout << "MerkelMain::enterAsk Bad input : "<< input << std::endl;
+        }
+        }
+   
+    std::cout << "You typed: "<< input << std::endl;
 }
 
 void MerkelMain::enterBid(){
-    std::cout << " 4: Bid for an exchange" << std::endl;
-    std::cout << " " << std::endl;
+    std::cout << " 4: Bid for an exchange - Enter: product, price, amount, eg ETH/BTC, 289, 0.4" << std::endl;
+        std::string input;
+    // Function to clean up input string
+    // std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+    std::getline(std::cin, input);
+
+    std::vector<std::string> tokens = CSVReader::tokenise(input, ',');
+    if (tokens.size() != 3) 
+    {
+    std::cout << "Bad Input! "<< input << std::endl;
+    }
+    else{
+        try{
+        OrderBookEntry obe = CSVReader::stringsToOBE(
+            currentTime,
+            tokens[0],
+            OrderBookType::bid,
+            tokens[1],
+            tokens[2]
+        );
+        orderBook.insertOrder(obe);
+        }catch(const std::exception& e)
+        {
+            std::cout << "MerkelMain::enterAsk Bad input : "<< input << std::endl;
+        }
+        }
+   
+    std::cout << "You typed: "<< input << std::endl;
 }
 
 void MerkelMain::printWallet(){

@@ -17,6 +17,8 @@
 
 #include "OrderBook.h"
 #include "CSVReader.h"
+#include <algorithm>
+
 
 
     /**Construtor, read in a CSV data file */
@@ -117,10 +119,10 @@
             // Collect the product price values for sum pf product prices
             for(OrderBookEntry& e :orders)
             {
-               //
+               //sum of elements
                sum += e.price;
             }
-            // divide by numer of elements to compute the average
+            // divide by nubmer of elements to compute the average
             mean = sum / orders.size();
             return mean;
 
@@ -144,5 +146,13 @@
             percentage =  (( mean - previous_mean)/mean)*100;
 
             return percentage;
+
+        }
+
+        /** Insert order into order book */
+        void    OrderBook::insertOrder(OrderBookEntry& order)
+        {
+            orders.push_back(order);
+            std::sort(orders.begin(), orders.end(), OrderBookEntry::compareByTimestamp );
 
         }

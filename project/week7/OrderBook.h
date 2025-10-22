@@ -25,6 +25,8 @@ class OrderBook{
          */
         std::string getNextTime(std::string timestamp);
 
+        void insertOrder(OrderBookEntry& order);
+
         static double getHighPrice(std::vector<OrderBookEntry>& orders);
 
         static double getLowPrice(std::vector<OrderBookEntry>& orders);
