@@ -3,7 +3,7 @@
 #include<vector>
 #include"OrderBookEntry.h"
 #include"OrderBook.h"
-
+#include"Wallet.h"
 
 class MerkelMain{
 
@@ -27,6 +27,8 @@ class MerkelMain{
         std::string currentTime;
         std::string previousTime ="";
 
-        OrderBook orderBook{"data/crypto_dataset.csv"};
+        OrderBook orderBook{"data/test_data.csv"};
+
+        Wallet wallet;
 
 };

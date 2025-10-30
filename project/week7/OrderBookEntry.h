@@ -5,7 +5,7 @@
 #pragma once
 #include<string>
 
-enum class OrderBookType{bid, ask, unknown};
+enum class OrderBookType{bid, ask, unknown, sale};
 
 class OrderBookEntry { 
     public:
@@ -22,6 +22,16 @@ class OrderBookEntry {
     static bool compareByTimestamp(OrderBookEntry& e1, OrderBookEntry& e2)
     {
         return e1.timestamp < e2.timestamp;
+    }
+
+    static bool comparePriceAsc(OrderBookEntry& e1, OrderBookEntry& e2)
+    {
+        return e1.price < e2.price;
+    }
+
+    static bool comparePriceDesc(OrderBookEntry& e1, OrderBookEntry& e2)
+    {
+        return e1.price > e2.price;
     }
 
     // Initialisation list

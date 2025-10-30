@@ -8,6 +8,8 @@ g++ main.cpp --> compile assemble and link.
 g++ main.cpp -o <filename>  --> compile to executable file name
 g++ --std=c++11 main.cpp  --> compile to executable file name
 g++ -Wall -std=c++11 main.cpp --> Warning flag 
+g++ -Wall -std=c++11 *.cpp --> compile all .cpp in folder
+
 
 
 /** Comment with double star will appear in the editor info */

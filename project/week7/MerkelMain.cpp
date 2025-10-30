@@ -5,6 +5,9 @@
 #include"MerkelMain.h"
 #include"OrderBookEntry.h"
 #include "CSVReader.h"
+#include"Wallet.h"
+
+
 
 MerkelMain::MerkelMain(){
 
@@ -15,6 +18,9 @@ void MerkelMain::init(){
     int input;
     currentTime = orderBook.getEarliestTime();
     previousTime = currentTime;
+    wallet.insertCurrency("BTC", 10);
+
+
     while(true){
             printMenu();
             input = getUserOption();
@@ -154,6 +160,16 @@ void MerkelMain::enterAsk(){
             tokens[1],
             tokens[2]
         );
+
+        if(wallet.canFulFillOrder(obe))
+        {
+            std::cout << "wallet looks good" << std::endl;
+            orderBook.insertOrder(obe);
+        }
+        else
+        {
+            std::cout << "wallet has insufficient funds" << std::endl;
+        }
         orderBook.insertOrder(obe);
         }catch(const std::exception& e)
         {
@@ -197,11 +213,22 @@ void MerkelMain::enterBid(){
 
 void MerkelMain::printWallet(){
     std::cout << " 5: Wallet print out" << std::endl;
+    std::cout << wallet.toString()<< std::endl;
     std::cout << " " << std::endl;
 }
 
 void MerkelMain::gotoNextTimeframe(){
     std::cout << " 6: Continue to next time frame " << std::endl;
+        for(std::string& p: orderBook.getKnownProducts()){
+            std::cout << "Matching " << p << std::endl;
+            std::vector<OrderBookEntry> sales = orderBook.matchAskToBid(p,currentTime);
+            std::cout << "Sales: "<< sales.size() << std::endl;
+            for(OrderBookEntry& sale :sales){
+                std::cout << "Sale Price: " << sale.price <<" amount "<< sale.amount <<std::endl;
+
+            } 
+
+        }
     std::cout << " " << std::endl;
     previousTime = currentTime;
     currentTime = orderBook.getNextTime(currentTime);
@@ -232,7 +259,7 @@ void MerkelMain::processUserOption(int userOption)
         enterBid();
         break;
     case 5:
-        void printWallet();
+        printWallet();
         break;
     case 6:
         gotoNextTimeframe();

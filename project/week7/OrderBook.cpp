@@ -22,137 +22,212 @@
 
 
     /**Construtor, read in a CSV data file */
-        OrderBook::OrderBook(std::string filename)
-        {
-            orders = CSVReader::readCSV(filename);
-        }
+OrderBook::OrderBook(std::string filename)
+{
+    orders = CSVReader::readCSV(filename);
+}
     /** Return vector of all known products in the dataset  */
-        std::vector<std::string> OrderBook::getKnownProducts()
-        {
-            std::vector<std::string> products;
-            // create key value pairs of poducts
-            std::map<std::string, bool> prodMap;
-            for(OrderBookEntry& e: orders)
-            {
-                prodMap[e.product] = true;
-            }
+std::vector<std::string> OrderBook::getKnownProducts()
+{
+    std::vector<std::string> products;
+    // create key value pairs of poducts
+    std::map<std::string, bool> prodMap;
+    for(OrderBookEntry& e: orders)
+    {
+        prodMap[e.product] = true;
+    }
 
-            for(auto const& e : prodMap)
-            {
-                products.push_back(e.first);
+    for(auto const& e : prodMap)
+    {
+        products.push_back(e.first);
+    }
+    return products;
+}
+/* Return vector of orders according to the sent filtres*/
+std::vector<OrderBookEntry> OrderBook::getOrders(OrderBookType type,
+                                        std::string product,
+                                        std::string timestamp)
+{
+    std::vector<OrderBookEntry> orders_sub;
+    for(OrderBookEntry& e : orders)
+    {
+        if( e.orderType == type &&
+            e.product == product &&
+            e.timestamp == timestamp){
+                orders_sub.push_back(e);
             }
-            return products;
-        }
-    /* Return vector of orders according to the sent filtres*/
-        std::vector<OrderBookEntry> OrderBook::getOrders(OrderBookType type,
-                                              std::string product,
-                                              std::string timestamp)
+    }
+
+    return orders_sub;    
+}
+
+double OrderBook::getHighPrice(std::vector<OrderBookEntry>& orders)
+{
+    double max = orders[0].price;
+    for(OrderBookEntry& e :orders){
+        if(e.price > max) max = e.price;
+
+    }
+    return max;
+}
+
+double OrderBook::getLowPrice(std::vector<OrderBookEntry>& orders)
+{
+    double min = orders[0].price;
+    for(OrderBookEntry& e :orders){
+        if(e.price < min) min = e.price;
+
+    }
+    return min;
+}
+
+std::string OrderBook::getEarliestTime(){
+
+    return orders[0].timestamp;
+}
+
+std::string OrderBook::getNextTime(std::string timestamp)
+
+{
+    std::string next_timestamp = ""; 
+    for( OrderBookEntry& e : orders)
+    {
+        if (e.timestamp > timestamp)
         {
-            std::vector<OrderBookEntry> orders_sub;
-            for(OrderBookEntry& e : orders)
-            {
-                if( e.orderType == type &&
-                    e.product == product &&
-                    e.timestamp == timestamp){
-                        orders_sub.push_back(e);
+            next_timestamp = e.timestamp;
+            break;
+        }
+    }
+    if (next_timestamp == "")
+    {
+        next_timestamp = orders[0].timestamp;
+    }
+    return next_timestamp;
+}
+
+/**Compute the arithmatic mean of the product prices
+ * input: vector of filtered order book entry
+ * returns: average of product price filtered by time stamp
+ */
+
+double OrderBook::computeMean(std::vector<OrderBookEntry>& orders)
+{
+    // Local varibles used for computation
+    double sum {0};
+    double mean{0};
+
+    // Collect the product price values for sum pf product prices
+    for(OrderBookEntry& e :orders)
+    {
+        //sum of elements
+        sum += e.price;
+    }
+    // divide by nubmer of elements to compute the average
+    mean = sum / orders.size();
+    return mean;
+
+}
+
+/*Compute the percentage change in price from timestamp to timestamp
+    * inputs: vectors of time stampe OrderBook entries filtered by time stamp
+    * returns: percentage change of average product price
+*/
+
+double OrderBook::percentageChange(std::vector<OrderBookEntry>& orders, std::vector<OrderBookEntry>& previous_orders)
+{
+    // variable to store returned value
+    double percentage;
+    // calculate the averages of the product price for current time stamp
+    double previous_mean = OrderBook::computeMean(previous_orders);
+        // calculate the averages of the product price for current previous time stamp
+    double mean = OrderBook::computeMean(orders);
+    
+    // compute the percentage change in product price using the mean of the price
+    percentage =  (( mean - previous_mean)/mean)*100;
+
+    return percentage;
+
+}
+
+/** Insert order into order book */
+void OrderBook::insertOrder(OrderBookEntry& order)
+{
+    orders.push_back(order);
+    std::sort(orders.begin(), orders.end(), OrderBookEntry::compareByTimestamp );
+}
+
+std::vector<OrderBookEntry> OrderBook::matchAskToBid(std::string product,std::string timestamp)
+{
+// asks = orderbook.asks in this timeframe
+   std::vector<OrderBookEntry> asks = getOrders(OrderBookType::ask,
+                                                product,
+                                                timestamp);
+// bids = orderbook.bids in this timeframe
+
+   std::vector<OrderBookEntry> bids = getOrders(OrderBookType::bid,
+                                                product,
+                                                timestamp);
+// sales = []  
+    std::vector<OrderBookEntry> sales;    
+// sort asks lowest first
+    std::sort(asks.begin(), asks.end(), OrderBookEntry::comparePriceAsc);
+// sort bids highest first
+    std::sort(bids.begin(), bids.end(), OrderBookEntry::comparePriceDesc);
+// for ask in asks:
+    for (OrderBookEntry& ask :asks){
+//  for bid in bids:
+        for( OrderBookEntry& bid :bids){
+//  if bid.price >= ask.price # we have a match
+            if(bid.price >= ask.price){
+//  sale = new orderbookentry()
+                OrderBookEntry sale{timestamp, product, OrderBookType::sale , ask.price, 0 };
+//  sale.price = ask.price
+//  if bid.amount == ask.amount: # bid completely clears ask
+                    if(bid.amount == ask.amount)
+                    {
+                    //  bid.amount < ask.amount
+                        sale.amount = ask.amount;
+                    //  sales.append(sale)
+                        sales.push_back(sale);
+                    //  bid.amount = 0 # make sure the bid is not processed again
+                        bid.amount = 0;
+                    //  # can do no more with this ask
+                    //  # go onto the next ask
+                    //  break
+                        break;
+                    }
+
+//  if bid.amount > ask.amount: # ask is completely gone slice the bid
+                    if(bid.amount > ask.amount){
+                    //  sale.amount = ask.amount
+                        sale.amount = ask.amount;
+                    //  sales.append(sale)
+                        sales.push_back(sale);
+                    //  # we adjust the bid in place
+                    //  # so it can be used to process the next ask
+                    //  bid.amount = bid.amount- ask.amount
+                        bid.amount = bid.amount- ask.amount;
+                    //  # ask is completely gone, so go to next ask
+                    //  break
+                        break;
+                    }
+//  if bid.amount < ask.amount # bid is completely gone, slice the ask
+                    if(bid.amount < ask.amount){
+                    //  sale.amount = bid.amount
+                        sale.amount = bid.amount;
+                    //  sales.append(sale)
+                        sales.push_back(sale);
+                    //  # update the ask
+                    //  # and allow further bids to process the remaining amount
+                    //  ask.amount = ask.amount- bid.amount
+                        ask.amount = ask.amount- bid.amount;
+                    //  bid.amount = 0 # make sure the bid is not processed again
+                    // continue
+                        continue;
                     }
             }
-
-            return orders_sub;    
         }
-
-        double OrderBook::getHighPrice(std::vector<OrderBookEntry>& orders)
-        {
-            double max = orders[0].price;
-            for(OrderBookEntry& e :orders){
-                if(e.price > max) max = e.price;
-
-            }
-            return max;
-        }
-
-        double OrderBook::getLowPrice(std::vector<OrderBookEntry>& orders)
-        {
-            double min = orders[0].price;
-            for(OrderBookEntry& e :orders){
-                if(e.price < min) min = e.price;
-
-            }
-            return min;
-        }
-        
-        std::string OrderBook::getEarliestTime(){
-
-            return orders[0].timestamp;
-        }
-
-        std::string OrderBook::getNextTime(std::string timestamp)
-
-        {
-            std::string next_timestamp = ""; 
-            for( OrderBookEntry& e : orders)
-            {
-                if (e.timestamp > timestamp)
-                {
-                    next_timestamp = e.timestamp;
-                    break;
-                }
-            }
-            if (next_timestamp == "")
-            {
-                next_timestamp = orders[0].timestamp;
-            }
-            return next_timestamp;
-        }
-
-        /**Compute the arithmatic mean of the product prices
-         * input: vector of filtered order book entry
-         * returns: average of product price filtered by time stamp
-         */
-
-        double OrderBook::computeMean(std::vector<OrderBookEntry>& orders)
-        {
-            // Local varibles used for computation
-            double sum {0};
-            double mean{0};
-
-            // Collect the product price values for sum pf product prices
-            for(OrderBookEntry& e :orders)
-            {
-               //sum of elements
-               sum += e.price;
-            }
-            // divide by nubmer of elements to compute the average
-            mean = sum / orders.size();
-            return mean;
-
-        }
-
-        /*Compute the percentage change in price from timestamp to timestamp
-         * inputs: vectors of time stampe OrderBook entries filtered by time stamp
-         * returns: percentage change of average product price
-        */
-
-        double OrderBook::percentageChange(std::vector<OrderBookEntry>& orders, std::vector<OrderBookEntry>& previous_orders)
-        {
-            // variable to store returned value
-            double percentage;
-            // calculate the averages of the product price for current time stamp
-            double previous_mean = OrderBook::computeMean(previous_orders);
-             // calculate the averages of the product price for current previous time stamp
-            double mean = OrderBook::computeMean(orders);
-            
-            // compute the percentage change in product price using the mean of the price
-            percentage =  (( mean - previous_mean)/mean)*100;
-
-            return percentage;
-
-        }
-
-        /** Insert order into order book */
-        void    OrderBook::insertOrder(OrderBookEntry& order)
-        {
-            orders.push_back(order);
-            std::sort(orders.begin(), orders.end(), OrderBookEntry::compareByTimestamp );
-
-        }
+    }
+// return sales
+    return sales;
+}
