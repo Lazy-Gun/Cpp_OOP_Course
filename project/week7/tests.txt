@@ -1,0 +1,70 @@
+   Wallet wallet;
+// Tests for insert Currency
+/*    std::cout << "Tests for insert Currency" << std::endl;
+    std::cout << "Start with an empty wallet" << std::endl;
+    std::cout << "Print wallet:" << std::endl;
+    std::cout << wallet.toString() << std::endl;
+    std::cout << "" << std::endl;
+    std::cout << "If currency 'type' is not in the wallet yet, set the amount to amount"<< std::endl;
+    std::cout << "Add 10 BTC and 10000 USDT "<< std::endl;
+    wallet.insertCurrency("BTC", 10);
+    wallet.insertCurrency("USDT", 10000);
+    std::cout << "Print wallet:" << std::endl;
+    std::cout << wallet.toString() << std::endl;
+    std::cout << "If currency 'type' is already in the wallet and has > 0, add amount to the current amount" << std::endl;
+    std::cout << "Add some more currency, 5 BTC and 5000 USDT" << std::endl;
+    wallet.insertCurrency("BTC", 5);
+    wallet.insertCurrency("USDT", 5000);
+    std::cout << "Print wallet:" << std::endl;
+    std::cout << wallet.toString() << std::endl;
+    std::cout << "Throw an exception if 'amount' is less than 0" << std::endl;
+    std::cout << "Lets try to add -10 ETH" << std::endl;
+    wallet.insertCurrency("ETH", -10);
+*/
+// Tests for remove currency
+/*  std::cout << "Tests for remove Currency" << std::endl;
+    wallet.insertCurrency("BTC", 15);
+    wallet.insertCurrency("USDT", 15000);
+    wallet.insertCurrency("ETH", 5000);
+    std::cout << "Start with this wallet" << std::endl;
+    std::cout << wallet.toString() << std::endl;
+    std::cout << "" << std::endl;
+    std::cout << "If the wallet does not contain this much currency, do not change the wallet and return True (Should be false as it cannot remove currency!?) " << std::endl;
+    std::cout << "Try to remove 10000 ETH : " << wallet.removeCurrency("ETH", 10000) <<std::endl;
+    std::cout << "Print Wallet" <<std::endl;
+    std::cout << wallet.toString() << std::endl;
+    std::cout << "" << std::endl;
+    std::cout << "If the wallet does contain at least this much currency of this type, remove the currency from the wallet and return true " << std::endl;
+    std::cout << "Try to remove 7500 USDT : " << wallet.removeCurrency("USDT", 7500) <<std::endl;
+    std::cout << "Print Wallet" <<std::endl;
+    std::cout << wallet.toString() << std::endl;
+    std::cout << "" << std::endl;
+    std::cout << "Throw an exception if amount < 0" << std::endl;
+    std::cout << "Try to remove -10 BTC: " << wallet.removeCurrency("BTC", -10) <<std::endl; */
+
+    std::cout << "Tests for remove Currency" << std::endl;
+    wallet.insertCurrency("BTC", 15);
+    wallet.insertCurrency("USDT", 15000);
+    wallet.insertCurrency("ETH", 5000);
+    std::cout << "Start with this wallet" << std::endl;
+    std::cout << wallet.toString() << std::endl;
+    std::cout << "" << std::endl;
+    std::cout << "Does the wallet contain 10000 USDT? : " << wallet.containsCurrency("USDT", 10000) << std::endl;
+    std::cout << "Does the wallet contain 100 BTC ? : " << wallet.containsCurrency("BTC", 100) << std::endl;
+
+/*
+    std::cout << "Use contains currency to check wallet for BTC " << wallet.containsCurrency("BTC", 10) <<std::endl;
+    std::cout << "Use contains currency to check wallet for USDT " << wallet.containsCurrency("USDT", 10000) <<std::endl;
+    std::cout << "Print wallet, using toString()" << std::endl;
+    std::cout << wallet.toString() << std::endl;
+    std::cout << "remove 5000 USDT" << std::endl;
+    wallet.removeCurrency("USDT", 5000);
+    std::cout << "use conatinsCurrency() to check the change in USDT" << std::endl;
+    std::cout << "Does the wallet conatin 10000 USDT? " << wallet.containsCurrency("USDT", 10000) << std::endl;
+    std::cout << "Does the wallet conatin 5000 USDT?  " << wallet.containsCurrency("USDT", 5000) << std::endl;
+    std::cout << "Print wallet, using toString()" << std::endl;
+    std::cout << wallet.toString() << std::endl;
+    std::cout << "Does wallet contain 10 ETH :" << wallet.containsCurrency("ETH", 10) << std::endl;
+    std::cout << "Does wallet contain 10 BTC :" << wallet.containsCurrency("BTC", 10) << std::endl;
+    std::cout << "_______________________________ :" <<  std::endl;
+*/

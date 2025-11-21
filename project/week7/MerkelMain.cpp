@@ -18,7 +18,7 @@ void MerkelMain::init(){
     int input;
     currentTime = orderBook.getEarliestTime();
     previousTime = currentTime;
-    wallet.insertCurrency("BTC", 10);
+    // wallet.insertCurrency("BTC", 10);
 
 
     while(true){
@@ -149,7 +149,7 @@ void MerkelMain::enterAsk(){
     std::vector<std::string> tokens = CSVReader::tokenise(input, ',');
     if (tokens.size() != 3) 
     {
-    std::cout << "Bad Input! "<< input << std::endl;
+    std::cout << "MerkelMain::enterAsk Bad Input! "<< input << std::endl;
     }
     else{
         try{
@@ -182,7 +182,7 @@ void MerkelMain::enterAsk(){
 
 void MerkelMain::enterBid(){
     std::cout << " 4: Bid for an exchange - Enter: product, price, amount, eg ETH/BTC, 289, 0.4" << std::endl;
-        std::string input;
+    std::string input;
     // Function to clean up input string
     // std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
     std::getline(std::cin, input);
@@ -190,7 +190,7 @@ void MerkelMain::enterBid(){
     std::vector<std::string> tokens = CSVReader::tokenise(input, ',');
     if (tokens.size() != 3) 
     {
-    std::cout << "Bad Input! "<< input << std::endl;
+    std::cout << " MerkelMain::enterBid Bad Input! "<< input << std::endl;
     }
     else{
         try{
@@ -201,6 +201,15 @@ void MerkelMain::enterBid(){
             tokens[1],
             tokens[2]
         );
+if(wallet.canFulFillOrder(obe))
+        {
+            std::cout << "wallet looks good" << std::endl;
+            orderBook.insertOrder(obe);
+        }
+        else
+        {
+            std::cout << "wallet has insufficient funds" << std::endl;
+        }
         orderBook.insertOrder(obe);
         }catch(const std::exception& e)
         {

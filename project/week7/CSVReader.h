@@ -1,3 +1,6 @@
+/*
+    CSVReader specification
+*/
 #pragma once
 
 #include"OrderBookEntry.h"
