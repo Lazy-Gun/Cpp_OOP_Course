@@ -12,7 +12,14 @@ std::vector<OrderBookEntry> CSVReader::readCSV(std::string csvFilename){
     std::vector<OrderBookEntry> orders;
     std::ifstream csvFile{csvFilename};
     std::string line;
+    if (!csvFile.is_open()) {
+    std::cerr << "Could not open file: " << csvFilename << std::endl;
+    return {};
+    }
+
     if(csvFile.is_open()){
+        std::cout << "file is open" << std::endl;
+
 
         while(std::getline(csvFile, line)){
             try{

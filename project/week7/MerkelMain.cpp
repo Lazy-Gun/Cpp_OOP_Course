@@ -18,7 +18,7 @@ void MerkelMain::init(){
     int input;
     currentTime = orderBook.getEarliestTime();
     previousTime = currentTime;
-    // wallet.insertCurrency("BTC", 10);
+    wallet.insertCurrency("BTC", 10);
 
 
     while(true){
@@ -160,7 +160,7 @@ void MerkelMain::enterAsk(){
             tokens[1],
             tokens[2]
         );
-
+        obe.username = "simuser";
         if(wallet.canFulFillOrder(obe))
         {
             std::cout << "wallet looks good" << std::endl;
@@ -201,7 +201,8 @@ void MerkelMain::enterBid(){
             tokens[1],
             tokens[2]
         );
-if(wallet.canFulFillOrder(obe))
+        obe.username = "simuser";
+        if(wallet.canFulFillOrder(obe))
         {
             std::cout << "wallet looks good" << std::endl;
             orderBook.insertOrder(obe);
@@ -234,6 +235,10 @@ void MerkelMain::gotoNextTimeframe(){
             std::cout << "Sales: "<< sales.size() << std::endl;
             for(OrderBookEntry& sale :sales){
                 std::cout << "Sale Price: " << sale.price <<" amount "<< sale.amount <<std::endl;
+                if (sale.username == "simuser")
+                {
+                    wallet.processSale(sale);
+                }
 
             } 
 

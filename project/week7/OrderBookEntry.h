@@ -5,7 +5,7 @@
 #pragma once
 #include<string>
 
-enum class OrderBookType{bid, ask, unknown, sale};
+enum class OrderBookType{bid, ask, unknown, bidsale, asksale};
 
 class OrderBookEntry { 
     public:
@@ -14,7 +14,8 @@ class OrderBookEntry {
                         std::string _product,
                         OrderBookType _orderType,          
                         double _price,
-                        double _amount
+                        double _amount,
+                        std::string username = "dataset"
                         );
 
     static OrderBookType stringToOrderBookType(std::string s);
@@ -42,4 +43,5 @@ class OrderBookEntry {
         OrderBookType orderType;
         double price;
         double amount;
+        std::string username;
 };  

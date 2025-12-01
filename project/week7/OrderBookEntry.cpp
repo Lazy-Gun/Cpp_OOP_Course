@@ -9,7 +9,8 @@ OrderBookEntry::OrderBookEntry (std::string _timestamp,
                         std::string _product,
                         OrderBookType _orderType,          
                         double _price,
-                        double _amount
+                        double _amount,
+                        std::string _username
                         )
 
     // Initialisation list
@@ -17,7 +18,8 @@ OrderBookEntry::OrderBookEntry (std::string _timestamp,
     product (_product),
     orderType (_orderType),
     price (_price),
-    amount (_amount)
+    amount (_amount),
+    username( _username)
 
 {
 

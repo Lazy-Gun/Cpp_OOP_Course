@@ -27,7 +27,7 @@ class MerkelMain{
         std::string currentTime;
         std::string previousTime ="";
 
-        OrderBook orderBook{"data/test_data.csv"};
+        OrderBook orderBook {"data/crypto_dataset.csv"};
 
         Wallet wallet;
 

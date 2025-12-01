@@ -30,6 +30,6 @@ int main()
 {
     MerkelMain app;
     app.init();
-    //CSVReader::readCSV("crypto_dataset.csv");
+    CSVReader::readCSV("crypto_dataset.csv");
 
 }

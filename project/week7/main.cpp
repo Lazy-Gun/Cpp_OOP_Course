@@ -14,6 +14,7 @@
 #include "CSVReader.h"
 #include "Wallet.h"
 
+// #include <filesystem>
 /**
 * Dataset : taken from the first 5 line of course datasetCSV
 *"01:24.9","ETH/BTC",OrderBookType::bid,0.02187308,7.44564869
@@ -29,7 +30,10 @@ std::string orderBookTypeToString(OrderBookType type);
 
 int main()
 {
+    
+    // std::cout << "Current working directory: "<< std::filesystem::current_path() << std::endl;
+
     MerkelMain app;
     app.init();
-    CSVReader::readCSV("crypto_dataset.csv");
+    //CSVReader::readCSV("data/crypto_dataset.csv");
 }
